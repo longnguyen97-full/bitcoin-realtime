@@ -1,0 +1,15 @@
+{
+  "name": "bitcoin-realtime",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/longnguyen97-full/bitcoin-realtime.git",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.5.3"
+  }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bitcoin Realtime</title>
+</head>
+<body>
+	<h1>Bitcoin Realtime</h1>
+
+	<ul id="messages"></ul>
+
+	<form id="chat-form">
+		<input type="text" id="chat-message">
+		<button id="chat-send">Send</button>
+	</form>
+</body>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	const socket = io()
+
+	const name = prompt('What is your name?')
+	const chatForm = document.querySelector('#chat-form')
+	const chatMessage = document.querySelector('#chat-message')
+
+	// send message to server when submit form
+	chatForm.addEventListener('submit', (e) => {
+		e.preventDefault()
+
+		const message = chatMessage.value
+
+		socket.emit('on-chat', {
+			name, message
+		})
+
+		// clear input after submit form
+		chatMessage.value = ''
+	})
+
+	// get message from user-chat channel and print on DOM
+	const messages = document.querySelector('#messages')
+	socket.on('user-chat', (message) => {
+		const chatItem = document.createElement('li')
+		chatItem.textContent = `${message.name}: ${message.message}` // use innerHTML will be taken security risk, use textContent instead of
+
+		messages.appendChild(chatItem)
+	})
+</script>
+
+</html>
