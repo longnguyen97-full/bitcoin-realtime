@@ -5,6 +5,9 @@ const http = require('http')
 const server = http.createServer(app)
 const { Server } = require('socket.io')
 
+// to delay to fake realtime
+const delay = require('delay')
+
 // socket instance
 const io = new Server(server)
 
@@ -24,3 +27,16 @@ io.on('connection', (socket) => {
 server.listen(3000, () => {
 	console.log('listening on port 3000')
 })
+
+async function broadcastBitcoinPrice() {
+	while(true) {
+		// dummy price
+		const price = 31570 + Math.random() * 400
+		io.emit('bitcoin-price', {
+			price: price.toFixed(2) // Math.random function return so many zero, use toFixed to reduce them
+		})
+		await delay(1000) // wait for 1 second to run
+	}
+}
+
+broadcastBitcoinPrice()

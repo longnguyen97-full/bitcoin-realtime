@@ -5,6 +5,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Bitcoin Realtime</title>
 </head>
+<style>
+	.up {
+		color: green;
+	}
+	.down {
+		color: red;
+	}
+</style>
 <body>
 	<h1>Bitcoin Realtime</h1>
 
@@ -14,6 +22,8 @@
 		<input type="text" id="chat-message">
 		<button id="chat-send">Send</button>
 	</form>
+
+	<span id="bitcoin-price"></span>
 </body>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -45,6 +55,16 @@
 		chatItem.textContent = `${message.name}: ${message.message}` // use innerHTML will be taken security risk, use textContent instead of
 
 		messages.appendChild(chatItem)
+	})
+
+	// get updated price and fill to span tag
+	const priceSpan = document.querySelector('#bitcoin-price')
+	let lastPrice = 0
+	socket.on('bitcoin-price', (data) => {
+		const price = data.price
+		price > lastPrice ? priceSpan.className = 'up' : priceSpan.className = 'down'
+		lastPrice = price
+		priceSpan.textContent = `${price} USD`
 	})
 </script>
 
